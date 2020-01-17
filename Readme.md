@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Taras Tenitskiy](https://up.htmlacademy.ru/javascript/19/user/555493).
-* Наставник: `Екатерина Кащенко, мечтатель о собстенной квартире и собаке`.
+* Наставник: [Екатерина Кащенко, мечтатель о собстенной квартире и собаке](https://htmlacademy.ru/profile/id109008).
 
 ---
 
