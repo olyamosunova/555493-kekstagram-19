@@ -1,10 +1,13 @@
 'use strict';
 
-var QUANTITY_RECORDS = 25;
+var RECORDS_COUNT = 25;
+var MESSAGES_COUNT = 100;
+var MIN_COMMENTS_COUNT = 3;
+var MAX_COMMENTS_COUNT = 15;
+var MIN_LIKES_COUNT = 10;
+var MAX_LIKES_COUNT = 200;
 
-var QUANTITY_MESSAGES = 100;
-
-var MESSAGE_TEMPLATES = [
+var messagesTemplates = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -13,7 +16,7 @@ var MESSAGE_TEMPLATES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var NAME_TEMPLATES = [
+var nameTemplates = [
   'Куселют',
   'Гладислав',
   'Кусимир',
@@ -23,44 +26,12 @@ var NAME_TEMPLATES = [
   'Усеслав',
   'Пузеслав',
   'Хвостосмысл',
-  'Хватебор',
-  'Царапович',
-  'Царап Хватьевич',
-  'Вкусилиса',
-  'Царапа',
-  'Кусихвост',
-  'Медолап',
-  'ВлаДиван',
-  'Сладкопуз',
-  'Пузочёсий',
-  'Мясополк',
-  'Жорополк',
-  'Мечижор',
-  'Шерстиком',
-  'Мурчала',
-  'Катратка',
-  'Яромур',
-  'Ярожор',
-  'Ярокус',
-  'Яроцап',
-  'Яролиз',
-  'Наглохват',
-  'Лютодрав',
-  'Кладимур',
-  'Мурополк',
-  'Мурослав',
-  'Удолюб',
-  'Вездессун',
-  'Втапкисрав',
-  'Гладислав',
-  'Вуглусрах'
+  'Царапа'
 ];
 
-var AVATAR_NUMBERS = [1, 2, 3, 4, 5, 6];
-var MIN_COMMENTS = 3;
-var MAX_COMMENTS = 15;
-var MIN_LIKES = 10;
-var MAX_LIKES = 200;
+var getRandomNumber = function (min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
 
 var getRandomElementFromArray = function (array) {
   var min = Math.floor(Math.random() * 2);
@@ -74,38 +45,30 @@ var getRandomElementFromArray = function (array) {
   return array[randomNumber];
 };
 
-var getAvatarURL = function (avatarNumbers) {
-  return 'img\\avatar-' + getRandomElementFromArray(avatarNumbers) + '.svg';
-};
-
-var createMessage = function (messageTemplates, names, avatarNumbers) {
+var createMessage = function (messageTemplates, names) {
   var message = Math.floor(Math.random() * 2) + 1 === 1 ? getRandomElementFromArray(messageTemplates) : getRandomElementFromArray(messageTemplates) + getRandomElementFromArray(messageTemplates);
 
   return {
-    avatar: getAvatarURL(avatarNumbers),
+    avatar: 'img\\avatar-' + getRandomNumber(1, 6) + '.svg',
     message: message,
     name: getRandomElementFromArray(names)
   };
 };
 
-var createMessages = function (quantity, messageTemplates, names, avatarNumbers) {
+var createMessages = function (quantity, messageTemplates, names) {
   var messages = [];
 
   for (var i = 0; i < quantity; i++) {
-    messages.push(createMessage(messageTemplates, names, avatarNumbers));
+    messages.push(createMessage(messageTemplates, names));
   }
 
   return messages;
 };
 
-var mokiMessages = createMessages(QUANTITY_MESSAGES, MESSAGE_TEMPLATES, NAME_TEMPLATES, AVATAR_NUMBERS);
+var mokiMessages = createMessages(MESSAGES_COUNT, messagesTemplates, nameTemplates);
 
 var getPhotoURL = function (number) {
   return 'photos/' + number + '.jpg';
-};
-
-var getQuantityLikes = function (minLikes, maxLikes) {
-  return Math.floor(Math.random() * (maxLikes - minLikes)) + minLikes;
 };
 
 var getComments = function (messages, minMessages, maxMessages) {
@@ -126,28 +89,30 @@ var renderMOKI = function (quantity, messages) {
     records.push({
       url: getPhotoURL(i + 1),
       description: ' ',
-      likes: getQuantityLikes(MIN_LIKES, MAX_LIKES),
-      comments: getComments(messages, MIN_COMMENTS, MAX_COMMENTS),
+      likes: getRandomNumber(MIN_LIKES_COUNT, MAX_LIKES_COUNT),
+      comments: getComments(messages, MIN_COMMENTS_COUNT, MAX_COMMENTS_COUNT),
     });
   }
 
   return records;
 };
 
-var picturesFragment = document.createDocumentFragment();
-var templatePicture = document.querySelector('#picture');
+var renderPictures = function (mokiData) {
+  var picturesFragment = document.createDocumentFragment();
+  var templatePicture = document.querySelector('#picture');
 
-var renderPictures = function (mokiData, template) {
   for (var i = 0; i < mokiData.length; i++) {
-    var pictureElement = template.cloneNode(true).content;
+    var pictureElement = templatePicture.cloneNode(true).content;
     pictureElement.querySelector('.picture__img').src = mokiData[i].url;
     pictureElement.querySelector('.picture__likes').textContent = mokiData[i].likes;
     pictureElement.querySelector('.picture__comments').textContent = mokiData[i].comments.length;
 
     picturesFragment.appendChild(pictureElement);
   }
+
+  document.querySelector('.pictures').appendChild(picturesFragment);
 };
 
-renderPictures(renderMOKI(QUANTITY_RECORDS, mokiMessages), templatePicture);
+renderPictures(renderMOKI(RECORDS_COUNT, mokiMessages));
 
-document.querySelector('.pictures').appendChild(picturesFragment);
+
