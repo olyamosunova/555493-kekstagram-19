@@ -105,12 +105,12 @@ var renderPictures = function (mokiData) {
   var picturesFragment = document.createDocumentFragment();
   var templatePicture = document.querySelector('#picture');
 
-  mokiData.forEach(function (item) {
+  mokiData.forEach(function (item, index) {
     var pictureElement = templatePicture.cloneNode(true).content;
     pictureElement.querySelector('.picture__img').src = item.url;
     pictureElement.querySelector('.picture__likes').textContent = item.likes;
     pictureElement.querySelector('.picture__comments').textContent = item.comments.length;
-
+    pictureElement.querySelector('.picture__img').dataset.id = index;
     picturesFragment.appendChild(pictureElement);
   });
 
@@ -144,9 +144,9 @@ var addComments = function (node, comments) {
   node.appendChild(commentsFragment);
 };
 
-var showBigPicture = function (mokiData, number) {
-  var bigPicture = document.querySelector('.big-picture');
+var bigPicture = document.querySelector('.big-picture');
 
+var showBigPicture = function (mokiData, number) {
   bigPicture.classList.remove('hidden');
 
   bigPicture.querySelector('.big-picture__img img').src = mokiData[number].url;
@@ -161,4 +161,58 @@ var showBigPicture = function (mokiData, number) {
   document.querySelector('body').classList.add('modal-open');
 };
 
-showBigPicture(moki, 24);
+var openBigPicture = function (evt) {
+  var pictureNumber = evt.target.dataset.id;
+  showBigPicture(moki, pictureNumber);
+
+  document.addEventListener('keydown', bigPicturePressEscape);
+};
+
+var usersPictures = document.querySelectorAll('.picture');
+
+usersPictures.forEach(function (picture) {
+  picture.addEventListener('click', openBigPicture);
+});
+
+
+var closeBigPicture = function () {
+  document.removeEventListener('keydown', bigPicturePressEscape);
+  document.querySelector('body').classList.remove('modal-open');
+  bigPicture.classList.add('hidden');
+};
+
+var bigPicturePressEscape = function (evt) {
+  if (evt.keyCode === 27) {
+    closeBigPicture();
+  }
+};
+
+var bigPictureCloseButton = bigPicture.querySelector('.big-picture__cancel');
+
+bigPictureCloseButton.addEventListener('click', closeBigPicture);
+
+var uploadFileInput = document.querySelector('#upload-file');
+var uploadFileWindow = document.querySelector('.img-upload__overlay');
+var uploadFileCancelButton = document.querySelector('.img-upload__cancel');
+
+var openUploadWindow = function () {
+  uploadFileWindow.classList.remove('hidden');
+  document.querySelector('body').classList.add('modal-open');
+  document.addEventListener('keydown', uploadFileWindowPressEscape);
+};
+
+var cancelUploadFile = function () {
+  uploadFileInput.value = null;
+  uploadFileWindow.classList.add('hidden');
+  document.querySelector('body').classList.remove('modal-open');
+  document.removeEventListener('keydown', uploadFileWindowPressEscape);
+};
+
+var uploadFileWindowPressEscape = function (evt) {
+  if (evt.keyCode === 27) {
+    cancelUploadFile();
+  }
+};
+
+uploadFileInput.addEventListener('change', openUploadWindow);
+uploadFileCancelButton.addEventListener('click', cancelUploadFile);
