@@ -11,6 +11,8 @@ var SOCIAL_PICTURE_HEIGHT = 35;
 var MIN_SCALE_VALUE = 25;
 var MAX_SCALE_VALUE = 100;
 var CHANGE_SCALE_STEP = 25;
+var KEY_ESCAPE = 'Escape';
+var KEY_ENTER = 'Enter';
 
 var messagesTemplates = [
   'Всё отлично!',
@@ -165,13 +167,26 @@ var showBigPicture = function (mokiData, number) {
 };
 
 var openBigPicture = function (evt) {
+  evt.preventDefault();
   var pictureNumber = evt.target.dataset.id;
+  if (pictureNumber === undefined) {
+    pictureNumber = evt.target.children[0].dataset.id;
+  }
   showBigPicture(moki, pictureNumber);
 
+  document.removeEventListener('keydown', userPicturesKeyDown);
   document.addEventListener('keydown', bigPicturePressEscape);
 };
 
 var usersPictures = document.querySelectorAll('.picture');
+
+var userPicturesKeyDown = function (evt) {
+  if (!document.querySelector('body').classList.contains('modal-open') && evt.key === KEY_ENTER && evt.target.classList.contains('picture')) {
+    openBigPicture(evt);
+  }
+};
+
+document.addEventListener('keydown', userPicturesKeyDown);
 
 usersPictures.forEach(function (picture) {
   picture.addEventListener('click', openBigPicture);
@@ -183,12 +198,13 @@ var isOnFocus = function (element) {
 
 var closeBigPicture = function () {
   document.removeEventListener('keydown', bigPicturePressEscape);
+  document.addEventListener('keydown', userPicturesKeyDown);
   document.querySelector('body').classList.remove('modal-open');
   bigPicture.classList.add('hidden');
 };
 
 var bigPicturePressEscape = function (evt) {
-  if (evt.keyCode === 27) {
+  if (evt.key === KEY_ESCAPE) {
     closeBigPicture();
   }
 };
