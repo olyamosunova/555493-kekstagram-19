@@ -61,12 +61,8 @@
   scaleControlSmaller.addEventListener('click', changeScaleValueHandler);
   scaleControlBigger.addEventListener('click', changeScaleValueHandler);
 
-  var effectLevelPin = uploadFileForm.querySelector('.effect-level__pin');
-  effectLevelPin.style.left = '100%';
   var effectLevel = uploadFileForm.querySelector('.effect-level');
   effectLevel.classList.add('hidden');
-  var effectLevelDepth = uploadFileForm.querySelector('.effect-level__depth');
-  var effectLevelValue = uploadFileForm.querySelector('.effect-level__value');
   var effectsRadioSet = uploadFileForm.querySelector('.effects');
 
   var clearEffect = function () {
@@ -74,26 +70,40 @@
     effectLevel.classList.add('hidden');
   };
 
+  var currentEffect = '';
+
   var addEffect = function (evt) {
-    var effectName = evt.target.value;
+    currentEffect = evt.target.value;
     clearEffect();
 
-    if (effectName !== 'none') {
-      uploadImagePreview.classList.add('effects__preview--' + effectName);
+    if (currentEffect !== 'none') {
+      uploadImagePreview.classList.add('effects__preview--' + currentEffect);
+      uploadImagePreview.style = '';
       effectLevel.classList.remove('hidden');
+      window.effectSlider.showHandler();
     }
-    changeEffectLevelDepth();
   };
 
-  var getEffectLevelDepth = function () {
-    var levelDepth = parseInt(effectLevelPin.style.left, 10);
-
-    return levelDepth;
-  };
-
-  var changeEffectLevelDepth = function () {
-    effectLevelDepth.style.width = getEffectLevelDepth() + '%';
-    effectLevelValue.value = getEffectLevelDepth();
+  var setEffectLevelDepth = function (depthValue) {
+    switch (currentEffect) {
+      case 'chrome':
+        uploadImagePreview.style = 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')';
+        break;
+      case 'sepia':
+        uploadImagePreview.style = 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')';
+        break;
+      case 'marvin':
+        uploadImagePreview.style = 'filter: invert(' + depthValue + '%)';
+        break;
+      case 'phobos':
+        uploadImagePreview.style = 'filter: blur(' + (depthValue * 0.03) + 'px)';
+        break;
+      case 'heat':
+        uploadImagePreview.style = 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')';
+        break;
+      default:
+        uploadImagePreview.style = '';
+    }
   };
 
   effectsRadioSet.addEventListener('click', addEffect);
@@ -165,5 +175,9 @@
   };
 
   uploadFileForm.addEventListener('submit', uploadFileFormSubmitHandler);
+
+  window.form = {
+    setEffectLevelDepth: setEffectLevelDepth
+  };
 
 })();
