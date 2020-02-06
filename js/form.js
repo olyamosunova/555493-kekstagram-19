@@ -6,10 +6,15 @@
   var uploadFileCancelButton = uploadFileForm.querySelector('.img-upload__cancel');
   var uploadFileHashtagsInput = uploadFileForm.querySelector('.text__hashtags');
   var uploadFileDescriptionInput = uploadFileForm.querySelector('.text__description');
+  var uploadImagePreview = uploadFileForm.querySelector('.img-upload__preview img');
+  var scaleControlSmaller = uploadFileForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = uploadFileForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = uploadFileForm.querySelector('.scale__control--value');
 
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
+    uploadImagePreview.style = '';
     scaleControlValue.value = '100%';
     document.addEventListener('keydown', uploadFileWindowPressEscape);
   };
@@ -30,12 +35,15 @@
   uploadFileInput.addEventListener('change', openUploadWindow);
   uploadFileCancelButton.addEventListener('click', cancelUploadFile);
 
-  var uploadImagePreview = uploadFileForm.querySelector('.img-upload__preview img');
+  var uploadImagePreviewState = {
+    scale: '',
+    filter: ''
+  };
 
-  var scaleControlSmaller = uploadFileForm.querySelector('.scale__control--smaller');
-  var scaleControlBigger = uploadFileForm.querySelector('.scale__control--bigger');
-  var scaleControlValue = uploadFileForm.querySelector('.scale__control--value');
-
+  var changeUploadImagePreviewState = function (name, value) {
+    uploadImagePreviewState[name] = value;
+    uploadImagePreview.style = uploadImagePreviewState.scale + '; ' + uploadImagePreviewState.filter + '; ';
+  };
 
   var getScaleValue = function () {
     return parseInt(scaleControlValue.value, 10);
@@ -44,8 +52,7 @@
   var setScaleValue = function (value) {
     if (value >= window.constants.MIN_SCALE_VALUE && value <= window.constants.MAX_SCALE_VALUE) {
       scaleControlValue.value = value + '%';
-
-      uploadImagePreview.style.transform = 'scale(' + value / 100 + ')';
+      changeUploadImagePreviewState('scale', 'transform: scale(' + value / 100 + ')');
     }
   };
 
@@ -65,6 +72,7 @@
   var effectsRadioSet = uploadFileForm.querySelector('.effects');
 
   var clearEffect = function () {
+    changeUploadImagePreviewState('filter', '');
     uploadImagePreview.removeAttribute('class');
     effectLevel.classList.add('hidden');
   };
@@ -77,7 +85,6 @@
 
     if (currentEffect !== 'none') {
       uploadImagePreview.classList.add('effects__preview--' + currentEffect);
-      uploadImagePreview.style = '';
       effectLevel.classList.remove('hidden');
       window.slider.showHandler();
     }
@@ -86,22 +93,22 @@
   var setEffectLevelDepth = function (depthValue) {
     switch (currentEffect) {
       case 'chrome':
-        uploadImagePreview.style = 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')';
+        changeUploadImagePreviewState('filter', 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')');
         break;
       case 'sepia':
-        uploadImagePreview.style = 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')';
+        changeUploadImagePreviewState('filter', 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')');
         break;
       case 'marvin':
-        uploadImagePreview.style = 'filter: invert(' + depthValue + '%)';
+        changeUploadImagePreviewState('filter', 'filter: invert(' + depthValue + '%)');
         break;
       case 'phobos':
-        uploadImagePreview.style = 'filter: blur(' + (depthValue * 0.03) + 'px)';
+        changeUploadImagePreviewState('filter', 'filter: blur(' + (depthValue * 0.03) + 'px)');
         break;
       case 'heat':
-        uploadImagePreview.style = 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')';
+        changeUploadImagePreviewState('filter', 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')');
         break;
       default:
-        uploadImagePreview.style = '';
+        changeUploadImagePreviewState('filter', '');
     }
   };
 

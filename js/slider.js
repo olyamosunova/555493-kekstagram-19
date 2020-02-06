@@ -50,7 +50,7 @@
   var showEffectSliderHandler = function () {
     pin.style.left = line.clientWidth + 'px';
     depth.style.width = line.clientWidth + 'px';
-    depthValue.value = window.config.DEFAULT_DEPTH_VALUE;
+    depthValue.value = window.constants.DEFAULT_DEPTH_VALUE;
   };
 
   window.slider = {
