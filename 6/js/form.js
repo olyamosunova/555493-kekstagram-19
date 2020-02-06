@@ -3,6 +3,8 @@
   var MIN_SCALE_VALUE = 25;
   var MAX_SCALE_VALUE = 100;
   var CHANGE_SCALE_STEP = 25;
+  var MAX_HASHTAGS_COUNT = 5;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var uploadFileForm = document.querySelector('.img-upload__form');
   var uploadFileInput = uploadFileForm.querySelector('#upload-file');
@@ -25,7 +27,7 @@
   };
 
   var uploadFileWindowPressEscape = function (evt) {
-    if (evt.keyCode === 27 && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
+    if (evt.key === window.main.KEY_ESCAPE && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
       cancelUploadFile();
     }
   };
@@ -100,16 +102,6 @@
     effectLevelValue.value = getEffectLevelDepth();
   };
 
-  var effectLevelPinMouseDownHandler = function () {
-
-  };
-
-  var effectLevelPinMouseUpHandler = function () {
-
-  };
-
-  effectLevelPin.addEventListener('mousedown', effectLevelPinMouseDownHandler);
-  effectLevelPin.addEventListener('mouseup', effectLevelPinMouseUpHandler);
   effectsRadioSet.addEventListener('click', addEffect);
 
   var findDuplicateElements = function (elements) {
@@ -134,23 +126,23 @@
     var errorMessage = '';
     var validity = true;
 
-    if (hashtags.length > 5) {
+    if (hashtags.length > MAX_HASHTAGS_COUNT) {
       errorMessage += 'Нельзя указать больше пяти хэш-тегов. ';
       validity = false;
     } else if (findDuplicateElements(hashtags)) {
       errorMessage += 'Один и тот же хэш-тег не может быть использован дважды. ';
     } else {
       hashtags.forEach(function (hashtag) {
-        if (hashtag.length > 20) {
+        if (hashtag.length > MAX_HASHTAG_LENGTH) {
           errorMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
           validity = false;
-        } else if (hashtag.length === 1 && hashtag === '#') {
+        } else if (hashtag === '#') {
           errorMessage += 'Хеш-тег не может состоять только из одной решётки. ';
           validity = false;
         } else if (hashtag.charAt(0) !== '#') {
           errorMessage += 'Хэш-тег должен начинаться с символа # (решётка). ';
           validity = false;
-        } else if (/[^a-zA-Z0-9]/.test(hashtag.substr(1, (hashtag.length - 1)))) {
+        } else if (/[^a-zA-Z0-9]/.test(hashtag.slice(1, (hashtag.length - 1)))) {
           errorMessage += 'строка после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д. ';
         }
       });
