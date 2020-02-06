@@ -10,6 +10,7 @@
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
+    scaleControlValue.value = '100%';
     document.addEventListener('keydown', uploadFileWindowPressEscape);
   };
 
@@ -41,7 +42,7 @@
   };
 
   var setScaleValue = function (value) {
-    if (value >= window.config.MIN_SCALE_VALUE && value <= window.config.MAX_SCALE_VALUE) {
+    if (value >= window.constants.MIN_SCALE_VALUE && value <= window.constants.MAX_SCALE_VALUE) {
       scaleControlValue.value = value + '%';
 
       uploadImagePreview.style.transform = 'scale(' + value / 100 + ')';
@@ -50,13 +51,11 @@
 
   var changeScaleValueHandler = function (evt) {
     if (evt.target === scaleControlSmaller) {
-      setScaleValue(getScaleValue() - window.config.CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() - window.constants.CHANGE_SCALE_STEP);
     } else if (evt.target === scaleControlBigger) {
-      setScaleValue(getScaleValue() + window.config.CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() + window.constants.CHANGE_SCALE_STEP);
     }
   };
-
-  scaleControlValue.value = '100%';
 
   scaleControlSmaller.addEventListener('click', changeScaleValueHandler);
   scaleControlBigger.addEventListener('click', changeScaleValueHandler);
@@ -80,7 +79,7 @@
       uploadImagePreview.classList.add('effects__preview--' + currentEffect);
       uploadImagePreview.style = '';
       effectLevel.classList.remove('hidden');
-      window.effectSlider.showHandler();
+      window.slider.showHandler();
     }
   };
 
@@ -130,14 +129,14 @@
     var errorMessage = '';
     var validity = true;
 
-    if (hashtags.length > window.config.MAX_HASHTAGS_COUNT) {
+    if (hashtags.length > window.constants.MAX_HASHTAGS_COUNT) {
       errorMessage += 'Нельзя указать больше пяти хэш-тегов. ';
       validity = false;
     } else if (findDuplicateElements(hashtags)) {
       errorMessage += 'Один и тот же хэш-тег не может быть использован дважды. ';
     } else {
       hashtags.forEach(function (hashtag) {
-        if (hashtag.length > window.config.MAX_HASHTAG_LENGTH) {
+        if (hashtag.length > window.constants.MAX_HASHTAG_LENGTH) {
           errorMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
           validity = false;
         } else if (hashtag === '#') {

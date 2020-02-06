@@ -8,7 +8,7 @@
   var MAX_HASHTAG_LENGTH = 20;
   var DEFAULT_DEPTH_VALUE = 100;
 
-  window.config = {
+  window.constants = {
     MIN_SCALE_VALUE: MIN_SCALE_VALUE,
     MAX_SCALE_VALUE: MAX_SCALE_VALUE,
     CHANGE_SCALE_STEP: CHANGE_SCALE_STEP,

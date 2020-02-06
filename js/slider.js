@@ -53,7 +53,7 @@
     depthValue.value = window.config.DEFAULT_DEPTH_VALUE;
   };
 
-  window.effectSlider = {
+  window.slider = {
     showHandler: showEffectSliderHandler,
     getDepthValue: getDepthValue
   };
