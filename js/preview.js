@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var SOCIAL_PICTURE_WIDTH = 35;
-  var SOCIAL_PICTURE_HEIGHT = 35;
 
   var preview = document.querySelector('.big-picture');
 
@@ -22,8 +20,6 @@
       newCommentImg.classList.add('social__picture');
       newCommentImg.src = item.avatar;
       newCommentImg.alt = item.name;
-      newCommentImg.width = SOCIAL_PICTURE_WIDTH;
-      newCommentImg.height = SOCIAL_PICTURE_HEIGHT;
       newCommentText.textContent = item.message;
 
       commentsFragment.appendChild(newComment);

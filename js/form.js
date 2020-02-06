@@ -1,11 +1,5 @@
 'use strict';
 (function () {
-  var MIN_SCALE_VALUE = 25;
-  var MAX_SCALE_VALUE = 100;
-  var CHANGE_SCALE_STEP = 25;
-  var MAX_HASHTAGS_COUNT = 5;
-  var MAX_HASHTAG_LENGTH = 20;
-
   var uploadFileForm = document.querySelector('.img-upload__form');
   var uploadFileInput = uploadFileForm.querySelector('#upload-file');
   var uploadFileWindow = uploadFileForm.querySelector('.img-upload__overlay');
@@ -47,7 +41,7 @@
   };
 
   var setScaleValue = function (value) {
-    if (value >= MIN_SCALE_VALUE && value <= MAX_SCALE_VALUE) {
+    if (value >= window.config.MIN_SCALE_VALUE && value <= window.config.MAX_SCALE_VALUE) {
       scaleControlValue.value = value + '%';
 
       uploadImagePreview.style.transform = 'scale(' + value / 100 + ')';
@@ -56,9 +50,9 @@
 
   var changeScaleValueHandler = function (evt) {
     if (evt.target === scaleControlSmaller) {
-      setScaleValue(getScaleValue() - CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() - window.config.CHANGE_SCALE_STEP);
     } else if (evt.target === scaleControlBigger) {
-      setScaleValue(getScaleValue() + CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() + window.config.CHANGE_SCALE_STEP);
     }
   };
 
@@ -126,14 +120,14 @@
     var errorMessage = '';
     var validity = true;
 
-    if (hashtags.length > MAX_HASHTAGS_COUNT) {
+    if (hashtags.length > window.config.MAX_HASHTAGS_COUNT) {
       errorMessage += 'Нельзя указать больше пяти хэш-тегов. ';
       validity = false;
     } else if (findDuplicateElements(hashtags)) {
       errorMessage += 'Один и тот же хэш-тег не может быть использован дважды. ';
     } else {
       hashtags.forEach(function (hashtag) {
-        if (hashtag.length > MAX_HASHTAG_LENGTH) {
+        if (hashtag.length > window.config.MAX_HASHTAG_LENGTH) {
           errorMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
           validity = false;
         } else if (hashtag === '#') {
