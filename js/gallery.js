@@ -23,5 +23,5 @@
     });
   };
 
-  renderPictures(window.data.moki);
+  window.backend.load(null, renderPictures);
 })();
