@@ -10,12 +10,14 @@
   var scaleControlSmaller = uploadFileForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadFileForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadFileForm.querySelector('.scale__control--value');
+  var effectLevel = uploadFileForm.querySelector('.effect-level');
+  var effectsRadioSet = uploadFileForm.querySelector('.effects');
 
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
-    scaleControlValue.value = '100%';
     document.addEventListener('keydown', uploadFileWindowPressEscape);
+    effectLevel.classList.add('hidden');
   };
 
   var closeUploadWindow = function () {
@@ -27,10 +29,13 @@
 
   var uploadFileFormClear = function () {
     uploadFileInput.value = null;
-    scaleControlValue.value = null;
+    scaleControlValue.value = '100%';
     uploadFileHashtagsInput.value = '';
-    uploadImagePreview.style = '';
-    uploadFileDescriptionInput.value = '100%';
+    changeUploadImagePreviewState('scale', '');
+    changeUploadImagePreviewState('filter', '');
+    uploadImagePreview.classList = '';
+    uploadFileDescriptionInput.value = '';
+    effectsRadioSet.querySelector('#effect-none').checked = true;
   };
 
   var uploadFileWindowPressEscape = function (evt) {
@@ -73,10 +78,6 @@
 
   scaleControlSmaller.addEventListener('click', changeScaleValueHandler);
   scaleControlBigger.addEventListener('click', changeScaleValueHandler);
-
-  var effectLevel = uploadFileForm.querySelector('.effect-level');
-  effectLevel.classList.add('hidden');
-  var effectsRadioSet = uploadFileForm.querySelector('.effects');
 
   var clearEffect = function () {
     changeUploadImagePreviewState('filter', '');
