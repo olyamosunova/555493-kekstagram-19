@@ -3,16 +3,11 @@
   var KEY_ESCAPE = 'Escape';
   var KEY_ENTER = 'Enter';
 
-  window.main = {
-    KEY_ESCAPE: KEY_ESCAPE,
-    KEY_ENTER: KEY_ENTER
-  };
-
-  window.main.getRandomNumber = function (min, max) {
+  var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
-  window.main.getRandomElementFromArray = function (array) {
+  var getRandomElementFromArray = function (array) {
     var min = Math.floor(Math.random() * 2);
     var max = array.length;
     var randomNumber = Math.floor(Math.random() * (max - min / 2));
@@ -24,12 +19,21 @@
     return array[randomNumber];
   };
 
-  window.main.isOnFocus = function (element) {
+  var isOnFocus = function (element) {
     return document.activeElement === element;
   };
 
-  window.main.isModalOpen = function () {
+  var isModalOpen = function () {
     return document.querySelector('body').classList.contains('modal-open');
+  };
+
+  window.main = {
+    KEY_ESCAPE: KEY_ESCAPE,
+    KEY_ENTER: KEY_ENTER,
+    getRandomNumber: getRandomNumber,
+    getRandomElementFromArray: getRandomElementFromArray,
+    isOnFocus: isOnFocus,
+    isModalOpen: isModalOpen
   };
 
 })();
