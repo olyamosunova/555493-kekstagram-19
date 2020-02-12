@@ -20,8 +20,14 @@
 
     pictures.forEach(function (picture, index) {
       picture.dataset.pictureID = index;
+      picture.addEventListener('click', window.preview.open);
     });
   };
 
-  window.backend.load(null, renderPictures);
+  var dataLoadHandler = function (data) {
+    window.data.save(data);
+    renderPictures(window.data.getData());
+  };
+
+  window.backend.load(null, dataLoadHandler);
 })();

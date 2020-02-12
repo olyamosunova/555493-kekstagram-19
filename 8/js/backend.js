@@ -4,7 +4,7 @@
   var RESPONCE_TIMEOUT = 1000;
   var ALL_CORRECT_STATUS = 200;
   var DOWNLOAD_DATA_URL = 'https://js.dump.academy/kekstagram/data';
-  var UPLOAD_DATA_URL = '';
+  var UPLOAD_DATA_URL = 'https://js.dump.academy/kekstagram';
 
   var createXHR = function (errorHandler, successHandler) {
     var xhr = new XMLHttpRequest();
