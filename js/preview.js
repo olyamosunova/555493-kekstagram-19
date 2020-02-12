@@ -48,8 +48,7 @@
     if (pictureNumber === undefined) {
       pictureNumber = evt.target.parentNode.dataset.pictureID;
     }
-
-    renderPreview(window.data.moki, pictureNumber);
+    renderPreview(window.data.getData(), pictureNumber);
     document.querySelector('body').classList.add('modal-open');
 
     document.removeEventListener('keydown', window.picture.picturePressEnterHandler);
