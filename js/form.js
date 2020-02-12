@@ -124,10 +124,12 @@
 
   var uploadSuccessHandler = function () {
     closeUploadWindow();
+    window.message.showSuccess();
   };
 
   var uploadErrorHandler = function () {
-
+    closeUploadWindow();
+    window.message.showError();
   };
 
   var uploadFileFormSubmitHandler = function (evt) {
