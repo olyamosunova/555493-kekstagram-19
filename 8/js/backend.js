@@ -2,7 +2,7 @@
 
 (function () {
   var RESPONCE_TIMEOUT = 1000;
-  var ALL_CORRECT_STATUS = 200;
+  var SUCCESS_STATUS = 200;
   var DOWNLOAD_DATA_URL = 'https://js.dump.academy/kekstagram/data';
   var UPLOAD_DATA_URL = 'https://js.dump.academy/kekstagram';
 
@@ -12,7 +12,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === ALL_CORRECT_STATUS) {
+      if (xhr.status === SUCCESS_STATUS) {
         successHandler(xhr.response);
       } else {
         errorHandler('Response status: ' + xhr.status + ' ' + xhr.statusText);

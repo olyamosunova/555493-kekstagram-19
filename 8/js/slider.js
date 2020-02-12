@@ -1,12 +1,12 @@
 'use strict';
 
 (function () {
-  var pin = document.querySelector('.effect-level__pin');
-  var line = document.querySelector('.effect-level__line');
-  var depth = document.querySelector('.effect-level__depth');
-  var depthValue = document.querySelector('.effect-level__value');
+  var pinElement = document.querySelector('.effect-level__pin');
+  var lineElement = document.querySelector('.effect-level__line');
+  var depthElement = document.querySelector('.effect-level__depth');
+  var depthValueInput = document.querySelector('.effect-level__value');
 
-  pin.addEventListener('mousedown', function (evt) {
+  pinElement.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     var startCoordX = evt.clientX;
 
@@ -17,12 +17,12 @@
       startCoordX = moveEvt.clientX;
 
 
-      var rightLimit = line.clientWidth;
+      var rightLimit = lineElement.clientWidth;
       var leftLimit = 0;
-      var newCoordX = pin.offsetLeft - shift;
+      var newCoordX = pinElement.offsetLeft - shift;
       if (newCoordX >= leftLimit && newCoordX <= rightLimit) {
-        pin.style.left = newCoordX + 'px';
-        depth.style.width = newCoordX + 'px';
+        pinElement.style.left = newCoordX + 'px';
+        depthElement.style.width = newCoordX + 'px';
         setDepthValue();
       }
     };
@@ -38,19 +38,19 @@
   });
 
   var setDepthValue = function () {
-    var value = Math.floor(pin.offsetLeft / line.clientWidth * 100);
-    depthValue.value = value;
+    var value = Math.floor(pinElement.offsetLeft / lineElement.clientWidth * 100);
+    depthValueInput.value = value;
     window.form.setEffectLevelDepth(value);
   };
 
   var getDepthValue = function () {
-    return depthValue.value;
+    return depthValueInput.value;
   };
 
   var showEffectSliderHandler = function () {
-    pin.style.left = line.clientWidth + 'px';
-    depth.style.width = line.clientWidth + 'px';
-    depthValue.value = window.constants.DEFAULT_DEPTH_VALUE;
+    pinElement.style.left = lineElement.clientWidth + 'px';
+    depthElement.style.width = lineElement.clientWidth + 'px';
+    depthValueInput.value = window.constants.DEFAULT_DEPTH_VALUE;
   };
 
   window.slider = {
