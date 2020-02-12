@@ -14,26 +14,33 @@
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
     document.querySelector('body').classList.add('modal-open');
-    uploadImagePreview.style = '';
     scaleControlValue.value = '100%';
     document.addEventListener('keydown', uploadFileWindowPressEscape);
   };
 
-  var cancelUploadFile = function () {
-    uploadFileInput.value = null;
+  var closeUploadWindow = function () {
     uploadFileWindow.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
     document.removeEventListener('keydown', uploadFileWindowPressEscape);
+    uploadFileFormClear();
+  };
+
+  var uploadFileFormClear = function () {
+    uploadFileInput.value = null;
+    scaleControlValue.value = null;
+    uploadFileHashtagsInput.value = '';
+    uploadImagePreview.style = '';
+    uploadFileDescriptionInput.value = '100%';
   };
 
   var uploadFileWindowPressEscape = function (evt) {
     if (evt.key === window.main.KEY_ESCAPE && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
-      cancelUploadFile();
+      closeUploadWindow();
     }
   };
 
   uploadFileInput.addEventListener('change', openUploadWindow);
-  uploadFileCancelButton.addEventListener('click', cancelUploadFile);
+  uploadFileCancelButton.addEventListener('click', closeUploadWindow);
 
   var uploadImagePreviewState = {
     scale: '',
@@ -114,10 +121,18 @@
 
   effectsRadioSet.addEventListener('click', addEffect);
 
+  var uploadSuccessHandler = function () {
+    closeUploadWindow();
+  };
+
+  var uploadErrorHandler = function () {
+
+  };
+
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
     if (window.validateForm.validate()) {
-      uploadFileForm.submit();
+      window.backend.save(new FormData(uploadFileForm), uploadErrorHandler, uploadSuccessHandler);
     }
   };
 
