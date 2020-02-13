@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var bodyElement = document.querySelector('body');
   var uploadFileForm = document.querySelector('.img-upload__form');
   var uploadFileInput = uploadFileForm.querySelector('#upload-file');
   var uploadFileWindow = uploadFileForm.querySelector('.img-upload__overlay');
@@ -10,30 +11,42 @@
   var scaleControlSmaller = uploadFileForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadFileForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadFileForm.querySelector('.scale__control--value');
+  var effectLevel = uploadFileForm.querySelector('.effect-level');
+  var effectsRadioSet = uploadFileForm.querySelector('.effects');
 
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
-    document.querySelector('body').classList.add('modal-open');
-    uploadImagePreview.style = '';
-    scaleControlValue.value = '100%';
-    document.addEventListener('keydown', uploadFileWindowPressEscape);
+    bodyElement.classList.add('modal-open');
+    document.addEventListener('keydown', uploadFileWindowPressEscapeHandler);
+    effectLevel.classList.add('hidden');
   };
 
-  var cancelUploadFile = function () {
-    uploadFileInput.value = null;
+  var closeUploadWindow = function () {
     uploadFileWindow.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
-    document.removeEventListener('keydown', uploadFileWindowPressEscape);
+    document.removeEventListener('keydown', uploadFileWindowPressEscapeHandler);
+    uploadFileFormClear();
   };
 
-  var uploadFileWindowPressEscape = function (evt) {
+  var uploadFileFormClear = function () {
+    uploadFileInput.value = null;
+    scaleControlValue.value = '100%';
+    uploadFileHashtagsInput.value = '';
+    changeUploadImagePreviewState('scale', '');
+    changeUploadImagePreviewState('filter', '');
+    uploadImagePreview.classList = '';
+    uploadFileDescriptionInput.value = '';
+    effectsRadioSet.querySelector('#effect-none').checked = true;
+  };
+
+  var uploadFileWindowPressEscapeHandler = function (evt) {
     if (evt.key === window.main.KEY_ESCAPE && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
-      cancelUploadFile();
+      closeUploadWindow();
     }
   };
 
   uploadFileInput.addEventListener('change', openUploadWindow);
-  uploadFileCancelButton.addEventListener('click', cancelUploadFile);
+  uploadFileCancelButton.addEventListener('click', closeUploadWindow);
 
   var uploadImagePreviewState = {
     scale: '',
@@ -67,10 +80,6 @@
   scaleControlSmaller.addEventListener('click', changeScaleValueHandler);
   scaleControlBigger.addEventListener('click', changeScaleValueHandler);
 
-  var effectLevel = uploadFileForm.querySelector('.effect-level');
-  effectLevel.classList.add('hidden');
-  var effectsRadioSet = uploadFileForm.querySelector('.effects');
-
   var clearEffect = function () {
     changeUploadImagePreviewState('filter', '');
     uploadImagePreview.removeAttribute('class');
@@ -91,33 +100,46 @@
   };
 
   var setEffectLevelDepth = function (depthValue) {
+    var filterStyle = '';
     switch (currentEffect) {
       case 'chrome':
-        changeUploadImagePreviewState('filter', 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')');
+        filterStyle = 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')';
         break;
       case 'sepia':
-        changeUploadImagePreviewState('filter', 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')');
+        filterStyle = 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')';
         break;
       case 'marvin':
-        changeUploadImagePreviewState('filter', 'filter: invert(' + depthValue + '%)');
+        filterStyle = 'filter: invert(' + depthValue + '%)';
         break;
       case 'phobos':
-        changeUploadImagePreviewState('filter', 'filter: blur(' + (depthValue * 0.03) + 'px)');
+        filterStyle = 'filter: blur(' + (depthValue * 0.03) + 'px)';
         break;
       case 'heat':
-        changeUploadImagePreviewState('filter', 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')');
+        filterStyle = 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')';
         break;
       default:
-        changeUploadImagePreviewState('filter', '');
+        filterStyle = '';
     }
+
+    changeUploadImagePreviewState('filter', filterStyle);
   };
 
   effectsRadioSet.addEventListener('click', addEffect);
 
+  var uploadSuccessHandler = function () {
+    closeUploadWindow();
+    window.message.showSuccess();
+  };
+
+  var uploadErrorHandler = function () {
+    closeUploadWindow();
+    window.message.showError();
+  };
+
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
     if (window.validateForm.validate()) {
-      uploadFileForm.submit();
+      window.backend.save(new FormData(uploadFileForm), uploadErrorHandler, uploadSuccessHandler);
     }
   };
 
