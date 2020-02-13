@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var bodyElement = document.querySelector('body');
   var uploadFileForm = document.querySelector('.img-upload__form');
   var uploadFileInput = uploadFileForm.querySelector('#upload-file');
   var uploadFileWindow = uploadFileForm.querySelector('.img-upload__overlay');
@@ -15,15 +16,15 @@
 
   var openUploadWindow = function () {
     uploadFileWindow.classList.remove('hidden');
-    document.querySelector('body').classList.add('modal-open');
-    document.addEventListener('keydown', uploadFileWindowPressEscape);
+    bodyElement.classList.add('modal-open');
+    document.addEventListener('keydown', uploadFileWindowPressEscapeHandler);
     effectLevel.classList.add('hidden');
   };
 
   var closeUploadWindow = function () {
     uploadFileWindow.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
-    document.removeEventListener('keydown', uploadFileWindowPressEscape);
+    document.removeEventListener('keydown', uploadFileWindowPressEscapeHandler);
     uploadFileFormClear();
   };
 
@@ -38,7 +39,7 @@
     effectsRadioSet.querySelector('#effect-none').checked = true;
   };
 
-  var uploadFileWindowPressEscape = function (evt) {
+  var uploadFileWindowPressEscapeHandler = function (evt) {
     if (evt.key === window.main.KEY_ESCAPE && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
       closeUploadWindow();
     }
@@ -99,25 +100,28 @@
   };
 
   var setEffectLevelDepth = function (depthValue) {
+    var filterStyle = '';
     switch (currentEffect) {
       case 'chrome':
-        changeUploadImagePreviewState('filter', 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')');
+        filterStyle = 'filter: grayscale(' + (depthValue / 100).toFixed(2) + ')';
         break;
       case 'sepia':
-        changeUploadImagePreviewState('filter', 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')');
+        filterStyle = 'filter: sepia(' + (depthValue / 100).toFixed(2) + ')';
         break;
       case 'marvin':
-        changeUploadImagePreviewState('filter', 'filter: invert(' + depthValue + '%)');
+        filterStyle = 'filter: invert(' + depthValue + '%)';
         break;
       case 'phobos':
-        changeUploadImagePreviewState('filter', 'filter: blur(' + (depthValue * 0.03) + 'px)');
+        filterStyle = 'filter: blur(' + (depthValue * 0.03) + 'px)';
         break;
       case 'heat':
-        changeUploadImagePreviewState('filter', 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')');
+        filterStyle = 'filter: brightness(' + (1 + parseFloat((depthValue * 0.02))) + ')';
         break;
       default:
-        changeUploadImagePreviewState('filter', '');
+        filterStyle = '';
     }
+
+    changeUploadImagePreviewState('filter', filterStyle);
   };
 
   effectsRadioSet.addEventListener('click', addEffect);
