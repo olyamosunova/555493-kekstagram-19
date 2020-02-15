@@ -6,7 +6,7 @@
 
   var showFilters = function () {
     galleryFilter.classList.remove('img-filters--inactive');
-    galleryFilter.addEventListener('click', changeFilter);
+    galleryFilter.addEventListener('click', applyFilterHandler);
   };
 
   var shuffleArray = function (arr) {
@@ -27,49 +27,51 @@
     window.gallery.applyFilter(filteredData.slice(0, 9));
   };
 
-  var applyDiscussedFilter = function () {
-    if (currentFilter !== 'discussed') {
-      var filteredData = window.data.getData()
-      .slice()
-      .sort(function (first, second) {
-        if (first.likes > second.likes) {
-          return -1;
-        } else if (first.likes < second.likes) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+  var applyDiscussedFilter = window.debounce(function () {
+    var filteredData = window.data.getData()
+    .slice()
+    .sort(function (first, second) {
+      if (first.likes > second.likes) {
+        return -1;
+      } else if (first.likes < second.likes) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 
-      window.gallery.applyFilter(filteredData);
-    }
-  };
+    window.gallery.applyFilter(filteredData);
+  });
 
   var applyDefaultFilter = function () {
-    if (currentFilter !== 'default') {
-      window.gallery.applyFilter(window.data.getData());
-    }
+    window.gallery.applyFilter(window.data.getData());
   };
 
-  var changeFilter = function (evt) {
-    document.querySelector('#filter-' + currentFilter).classList.remove('img-filters__button--active');
-    evt.target.classList.add('img-filters__button--active');
+  var applyFilterHandler = function (evt) {
+    if (evt.target.classList.contains('img-filters__button')) {
+      var currentFilterButton = document.querySelector('#filter-' + currentFilter);
+      currentFilterButton.classList.remove('img-filters__button--active');
+      currentFilterButton.disabled = false;
 
-    switch (evt.target.id.split('-')[1]) {
-      case 'random':
-        applyRandomFilter();
-        break;
-      case 'discussed':
-        applyDiscussedFilter();
-        break;
-      case 'default':
-        applyDefaultFilter();
-        break;
-      default:
-        applyDefaultFilter();
+      evt.target.classList.add('img-filters__button--active');
+      evt.target.disabled = true;
+
+      switch (evt.target.id.split('-')[1]) {
+        case 'random':
+          applyRandomFilter();
+          break;
+        case 'discussed':
+          applyDiscussedFilter();
+          break;
+        case 'default':
+          applyDefaultFilter();
+          break;
+        default:
+          applyDefaultFilter();
+      }
+
+      currentFilter = evt.target.id.split('-')[1];
     }
-
-    currentFilter = evt.target.id.split('-')[1];
   };
 
   window.galleryFilter = {
