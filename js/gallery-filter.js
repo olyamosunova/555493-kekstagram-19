@@ -23,9 +23,9 @@
   };
 
   var applyRandomFilter = function () {
-    var filteredData = shuffleArray(window.data.getData().slice());
+    var filteredData = shuffleArray(window.data.getData().slice()).slice(0, RANDOM_FILTERED_COUNT);
 
-    window.gallery.applyFilter(filteredData.slice(0, RANDOM_FILTERED_COUNT));
+    window.gallery.applyFilter(filteredData);
   };
 
   var applyDiscussedFilter = window.debounce(function () {
