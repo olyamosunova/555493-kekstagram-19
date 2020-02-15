@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var RANDOM_FILTERED_COUNT = 10;
   var galleryFilter = document.querySelector('.img-filters');
   var currentFilter = 'default';
 
@@ -24,7 +25,7 @@
   var applyRandomFilter = function () {
     var filteredData = shuffleArray(window.data.getData().slice());
 
-    window.gallery.applyFilter(filteredData.slice(0, 9));
+    window.gallery.applyFilter(filteredData.slice(0, RANDOM_FILTERED_COUNT));
   };
 
   var applyDiscussedFilter = window.debounce(function () {
