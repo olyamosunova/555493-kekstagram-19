@@ -24,10 +24,27 @@
     });
   };
 
+  var deletePictures = function () {
+    var pictures = document.querySelectorAll('a.picture');
+    pictures.forEach(function (picture) {
+      picture.remove();
+    });
+  };
+
+  var applyFilter = function (data) {
+    deletePictures();
+    renderPictures(data);
+  };
+
   var dataLoadHandler = function (data) {
     window.data.save(data);
     renderPictures(window.data.getData());
+    window.galleryFilter.show();
   };
 
   window.backend.load(null, dataLoadHandler);
+
+  window.gallery = {
+    applyFilter: applyFilter
+  };
 })();
