@@ -1,45 +1,73 @@
 'use strict';
 
 (function () {
-
+  var PORTION_COMMENTS_COUNT = 5;
   var preview = document.querySelector('.big-picture');
+  var commentsElement = preview.querySelector('.social__comments');
+  var commentsLoaderButton = preview.querySelector('.comments-loader');
+  var commentsShowedCountElement = preview.querySelector('.comments-showed');
+  var commentsCountElement = preview.querySelector('.comments-count');
+  var showedCommentsCount = 0;
+  var comments;
 
 
-  var addComments = function (node, comments) {
+  var addComments = function () {
+    var restCommentsCount = comments.length - showedCommentsCount;
+
     var commentsFragment = document.createDocumentFragment();
-    node.innerHTML = '';
+    var newCommentsPortionCount = restCommentsCount < PORTION_COMMENTS_COUNT ? restCommentsCount : PORTION_COMMENTS_COUNT;
 
-    comments.forEach(function (item) {
-      var newComment = document.createElement('li');
-      var newCommentImg = document.createElement('img');
-      newComment.appendChild(newCommentImg);
-      var newCommentText = document.createElement('p');
-      newComment.appendChild(newCommentText);
+    var newPortionComment = comments.slice(showedCommentsCount, showedCommentsCount + newCommentsPortionCount);
 
-      newComment.classList.add('social__comment');
-      newCommentImg.classList.add('social__picture');
-      newCommentImg.src = item.avatar;
-      newCommentImg.alt = item.name;
-      newCommentText.textContent = item.message;
-
+    newPortionComment.forEach(function (item) {
+      var newComment = addComment(item);
       commentsFragment.appendChild(newComment);
     });
+    commentsElement.appendChild(commentsFragment);
 
-    node.appendChild(commentsFragment);
+    if (showedCommentsCount === 0) {
+      commentsLoaderButton.classList.remove('hidden');
+      commentsLoaderButton.addEventListener('click', addComments);
+    }
+
+    showedCommentsCount += newCommentsPortionCount;
+    commentsShowedCountElement.textContent = showedCommentsCount;
+
+    if (showedCommentsCount === comments.length) {
+      commentsLoaderButton.classList.add('hidden');
+      commentsLoaderButton.removeEventListener('click', addComments);
+    }
+  };
+
+  var addComment = function (dataItem) {
+    var newComment = document.createElement('li');
+    var newCommentImg = document.createElement('img');
+    newComment.appendChild(newCommentImg);
+    var newCommentText = document.createElement('p');
+    newComment.appendChild(newCommentText);
+
+    newComment.classList.add('social__comment');
+    newCommentImg.classList.add('social__picture');
+    newCommentImg.src = dataItem.avatar;
+    newCommentImg.alt = dataItem.name;
+    newCommentText.textContent = dataItem.message;
+
+    return newComment;
   };
 
   var renderPreview = function (data, number) {
-    preview.classList.remove('hidden');
-
+    commentsElement.innerHTML = '';
     preview.querySelector('.big-picture__img img').src = data[number].url;
     preview.querySelector('.likes-count').textContent = data[number].likes;
-    preview.querySelector('.comments-count').textContent = data[number].comments.length;
     preview.querySelector('.social__caption').textContent = data[number].decription;
 
-    addComments(preview.querySelector('.social__comments'), data[number].comments);
+    preview.classList.remove('hidden');
 
-    preview.querySelector('.social__comment-count').classList.add('hidden');
-    preview.querySelector('.comments-loader').classList.add('hidden');
+    if (data[number].comments.length > 0) {
+      commentsCountElement.textContent = data[number].comments.length;
+      comments = data[number].comments;
+      addComments();
+    }
   };
 
   var openPreview = function (evt) {
@@ -56,7 +84,9 @@
   };
 
   var closePreview = function () {
+    showedCommentsCount = 0;
     document.removeEventListener('keydown', previewPressEscape);
+    commentsLoaderButton.removeEventListener('click', addComments);
     document.addEventListener('keydown', window.picture.picturePressEnterHandler);
     document.querySelector('body').classList.remove('modal-open');
     preview.classList.add('hidden');
