@@ -84,6 +84,7 @@
   };
 
   var closePreview = function () {
+    showedCommentsCount = 0;
     document.removeEventListener('keydown', previewPressEscape);
     commentsLoaderButton.removeEventListener('click', addComments);
     document.addEventListener('keydown', window.picture.picturePressEnterHandler);
