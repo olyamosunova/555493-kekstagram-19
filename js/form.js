@@ -45,7 +45,19 @@
     }
   };
 
-  uploadFileInput.addEventListener('change', openUploadWindow);
+  var fileReaderLoadHandler = function (evt) {
+    uploadImagePreview.src = evt.target.result;
+  };
+
+  var uploadFileInputHandler = function (evt) {
+    var uploadFile = uploadFileInput.files[0];
+    var fileReader = new FileReader();
+    fileReader.addEventListener('load', fileReaderLoadHandler);
+    fileReader.readAsDataURL(uploadFile);
+    openUploadWindow(evt);
+  };
+
+  uploadFileInput.addEventListener('change', uploadFileInputHandler);
   uploadFileCancelButton.addEventListener('click', closeUploadWindow);
 
   var uploadImagePreviewState = {
