@@ -7,7 +7,7 @@
 
   var showFilters = function () {
     galleryFilter.classList.remove('img-filters--inactive');
-    galleryFilter.addEventListener('click', applyFilterHandler);
+    galleryFilter.addEventListener('click', window.debounce(applyFilterHandler, '1234'));
   };
 
   var shuffleArray = function (arr) {
@@ -28,7 +28,7 @@
     window.gallery.applyFilter(filteredData);
   };
 
-  var applyDiscussedFilter = window.debounce(function () {
+  var applyDiscussedFilter = function () {
     var filteredData = window.data.getData()
     .slice()
     .sort(function (first, second) {
@@ -42,7 +42,7 @@
     });
 
     window.gallery.applyFilter(filteredData);
-  });
+  };
 
   var applyDefaultFilter = function () {
     window.gallery.applyFilter(window.data.getData());

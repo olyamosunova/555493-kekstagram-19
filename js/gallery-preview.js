@@ -10,7 +10,6 @@
   var showedCommentsCount = 0;
   var comments;
 
-
   var renderComments = function () {
     var restCommentsCount = comments.length - showedCommentsCount;
     var commentsFragment = document.createDocumentFragment();

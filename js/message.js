@@ -3,7 +3,7 @@
 (function () {
   var successTemplate = document.querySelector('#success').content;
   var errorTemplate = document.querySelector('#error').content;
-  var showedMessage;
+  var showedMessageElement;
 
   var showSuccess = function (text) {
     var message = successTemplate.cloneNode(true);
@@ -13,9 +13,9 @@
     }
 
     document.querySelector('main').appendChild(message);
-    showedMessage = document.querySelector('section.success');
+    showedMessageElement = document.querySelector('section.success');
 
-    showedMessage.querySelector('.success__button').addEventListener('click', hide);
+    showedMessageElement.querySelector('.success__button').addEventListener('click', hide);
     document.addEventListener('keydown', messageEscDownHandler);
   };
 
@@ -27,8 +27,8 @@
     }
 
     document.querySelector('main').appendChild(message);
-    showedMessage = document.querySelector('section.error');
-    showedMessage.querySelector('.error__button').addEventListener('click', hide);
+    showedMessageElement = document.querySelector('section.error');
+    showedMessageElement.querySelector('.error__button').addEventListener('click', hide);
     document.addEventListener('keydown', messageEscDownHandler);
   };
 
@@ -39,14 +39,13 @@
   };
 
   var hide = function () {
-    showedMessage.remove();
+    showedMessageElement.remove();
 
     document.removeEventListener('keydown', messageEscDownHandler);
   };
 
   window.message = {
     showSuccess: showSuccess,
-    showError: showError,
-    hide: hide
+    showError: showError
   };
 })();
