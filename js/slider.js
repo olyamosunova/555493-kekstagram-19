@@ -56,7 +56,7 @@
   };
 
   window.slider = {
-    showHandler: showEffectSliderHandler,
+    show: showEffectSliderHandler,
     getDepthValue: getDepthValue
   };
 

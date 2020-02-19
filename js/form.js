@@ -111,7 +111,7 @@
     if (currentEffect !== 'none') {
       uploadImagePreviewElement.classList.add('effects__preview--' + currentEffect);
       effectLevelElement.classList.remove('hidden');
-      window.slider.showHandler();
+      window.slider.show();
     }
   };
 
