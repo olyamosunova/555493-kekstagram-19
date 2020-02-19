@@ -1,7 +1,7 @@
 'use strict';
 (function () {
-  var KEY_ESCAPE = 'Escape';
-  var KEY_ENTER = 'Enter';
+  var ESC_KEYCODE = 'Escape';
+  var ENTER_KEYCODE = 'Enter';
 
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
@@ -19,6 +19,14 @@
     return array[randomNumber];
   };
 
+  var isEnterPressed = function (evt) {
+    return evt.keyCode === ENTER_KEYCODE;
+  };
+
+  var isEscPressed = function (evt) {
+    return evt.keyCode === ESC_KEYCODE;
+  };
+
   var isOnFocus = function (element) {
     return document.activeElement === element;
   };
@@ -27,11 +35,11 @@
     return document.querySelector('body').classList.contains('modal-open');
   };
 
-  window.main = {
-    KEY_ESCAPE: KEY_ESCAPE,
-    KEY_ENTER: KEY_ENTER,
+  window.utils = {
     getRandomNumber: getRandomNumber,
     getRandomElementFromArray: getRandomElementFromArray,
+    isEnterPressed: isEnterPressed,
+    isEscPressed: isEscPressed,
     isOnFocus: isOnFocus,
     isModalOpen: isModalOpen
   };

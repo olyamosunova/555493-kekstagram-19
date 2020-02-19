@@ -40,7 +40,7 @@
   };
 
   var uploadFileWindowPressEscapeHandler = function (evt) {
-    if (evt.key === window.main.KEY_ESCAPE && !window.main.isOnFocus(uploadFileDescriptionInput) && !window.main.isOnFocus(uploadFileHashtagsInput)) {
+    if (window.utils.isEscPressed(evt) && !window.utils.isOnFocus(uploadFileDescriptionInput) && !window.utils.isOnFocus(uploadFileHashtagsInput)) {
       closeUploadWindow();
     }
   };

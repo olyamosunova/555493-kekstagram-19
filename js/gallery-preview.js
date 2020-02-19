@@ -11,23 +11,21 @@
   var comments;
 
 
-  var addComments = function () {
+  var renderComments = function () {
     var restCommentsCount = comments.length - showedCommentsCount;
-
     var commentsFragment = document.createDocumentFragment();
     var newCommentsPortionCount = restCommentsCount < PORTION_COMMENTS_COUNT ? restCommentsCount : PORTION_COMMENTS_COUNT;
-
     var newPortionComment = comments.slice(showedCommentsCount, showedCommentsCount + newCommentsPortionCount);
 
     newPortionComment.forEach(function (item) {
-      var newComment = addComment(item);
+      var newComment = renderComment(item);
       commentsFragment.appendChild(newComment);
     });
     commentsElement.appendChild(commentsFragment);
 
     if (showedCommentsCount === 0) {
       commentsLoaderButton.classList.remove('hidden');
-      commentsLoaderButton.addEventListener('click', addComments);
+      commentsLoaderButton.addEventListener('click', renderComments);
     }
 
     showedCommentsCount += newCommentsPortionCount;
@@ -35,11 +33,11 @@
 
     if (showedCommentsCount === comments.length) {
       commentsLoaderButton.classList.add('hidden');
-      commentsLoaderButton.removeEventListener('click', addComments);
+      commentsLoaderButton.removeEventListener('click', renderComments);
     }
   };
 
-  var addComment = function (dataItem) {
+  var renderComment = function (dataItem) {
     var newComment = document.createElement('li');
     var newCommentImg = document.createElement('img');
     newComment.appendChild(newCommentImg);
@@ -66,7 +64,7 @@
     if (data[number].comments.length > 0) {
       commentsCountElement.textContent = data[number].comments.length;
       comments = data[number].comments;
-      addComments();
+      renderComments();
     }
   };
 
@@ -86,14 +84,14 @@
   var closePreview = function () {
     showedCommentsCount = 0;
     document.removeEventListener('keydown', previewPressEscape);
-    commentsLoaderButton.removeEventListener('click', addComments);
+    commentsLoaderButton.removeEventListener('click', renderComments);
     document.addEventListener('keydown', window.picture.picturePressEnterHandler);
     document.querySelector('body').classList.remove('modal-open');
     preview.classList.add('hidden');
   };
 
   var previewPressEscape = function (evt) {
-    if (evt.key === window.main.KEY_ESCAPE) {
+    if (window.utils.isEscPressed(evt.key)) {
       closePreview();
     }
   };
@@ -102,7 +100,7 @@
 
   previewCloseButton.addEventListener('click', closePreview);
 
-  window.preview = {
+  window.galleryPreview = {
     open: openPreview,
     close: closePreview
   };

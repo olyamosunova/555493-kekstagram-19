@@ -20,7 +20,7 @@
 
     pictures.forEach(function (picture, index) {
       picture.dataset.pictureID = index;
-      picture.addEventListener('click', window.preview.open);
+      picture.addEventListener('click', window.galleryPreview.open);
     });
   };
 
@@ -30,6 +30,14 @@
       picture.remove();
     });
   };
+
+  var galleryPicturePressEnterHandler = function (evt) {
+    if (!window.utils.isModalOpen() && window.utils.isEnterPressed && evt.target.classList.contains('picture')) {
+      window.galleryPreview.open(evt);
+    }
+  };
+
+  document.addEventListener('keydown', galleryPicturePressEnterHandler);
 
   var applyFilter = function (data) {
     deletePictures();
@@ -45,6 +53,7 @@
   window.backend.load(null, dataLoadHandler);
 
   window.gallery = {
-    applyFilter: applyFilter
+    applyFilter: applyFilter,
+    galleryPicturePressEnterHandler: galleryPicturePressEnterHandler
   };
 })();

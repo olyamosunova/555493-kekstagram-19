@@ -32,9 +32,9 @@
     var filteredData = window.data.getData()
     .slice()
     .sort(function (first, second) {
-      if (first.likes > second.likes) {
+      if (first.comments.length > second.comments.length) {
         return -1;
-      } else if (first.likes < second.likes) {
+      } else if (first.comments.length < second.comments.length) {
         return 1;
       } else {
         return 0;
