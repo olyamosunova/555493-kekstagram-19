@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  var MIN_SCALE_VALUE = 25;
+  var MAX_SCALE_VALUE = 100;
+  var CHANGE_SCALE_STEP = 25;
+
   var bodyElement = document.querySelector('body');
   var uploadFileForm = document.querySelector('.img-upload__form');
   var uploadFileInput = uploadFileForm.querySelector('#upload-file');
@@ -75,7 +79,7 @@
   };
 
   var setScaleValue = function (value) {
-    if (value >= window.constants.MIN_SCALE_VALUE && value <= window.constants.MAX_SCALE_VALUE) {
+    if (value >= MIN_SCALE_VALUE && value <= MAX_SCALE_VALUE) {
       scaleControlValue.value = value + '%';
       changeUploadImagePreviewState('scale', 'transform: scale(' + value / 100 + ')');
     }
@@ -83,9 +87,9 @@
 
   var changeScaleValueHandler = function (evt) {
     if (evt.target === scaleControlSmaller) {
-      setScaleValue(getScaleValue() - window.constants.CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() - CHANGE_SCALE_STEP);
     } else if (evt.target === scaleControlBigger) {
-      setScaleValue(getScaleValue() + window.constants.CHANGE_SCALE_STEP);
+      setScaleValue(getScaleValue() + CHANGE_SCALE_STEP);
     }
   };
 
@@ -150,7 +154,7 @@
 
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    if (window.validateForm.validate()) {
+    if (window.formValidator.validate()) {
       window.backend.save(new FormData(uploadFileForm), uploadErrorHandler, uploadSuccessHandler);
     }
   };
