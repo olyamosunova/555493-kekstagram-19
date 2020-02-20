@@ -7,7 +7,7 @@
 
   var showFilters = function () {
     galleryFilter.classList.remove('img-filters--inactive');
-    galleryFilter.addEventListener('click', window.debounce(applyFilterHandler, '1234'));
+    galleryFilter.addEventListener('click', window.debounce(applyFilterHandler));
   };
 
   var shuffleArray = function (arr) {
@@ -28,7 +28,7 @@
     window.gallery.applyFilter(filteredData);
   };
 
-  var applyDiscussedFilter = function () {
+  var applyTopCommentsFilter = function () {
     var filteredData = window.data.getData()
     .slice()
     .sort(function (first, second) {
@@ -62,7 +62,7 @@
           applyRandomFilter();
           break;
         case 'discussed':
-          applyDiscussedFilter();
+          applyTopCommentsFilter();
           break;
         case 'default':
           applyDefaultFilter();
