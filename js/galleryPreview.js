@@ -52,17 +52,17 @@
     return newComment;
   };
 
-  var renderPreview = function (data, number) {
+  var renderPreview = function (data, pictureID) {
     commentsElement.innerHTML = '';
-    preview.querySelector('.big-picture__img img').src = data[number].url;
-    preview.querySelector('.likes-count').textContent = data[number].likes;
-    preview.querySelector('.social__caption').textContent = data[number].decription;
+    preview.querySelector('.big-picture__img img').src = data[pictureID].url;
+    preview.querySelector('.likes-count').textContent = data[pictureID].likes;
+    preview.querySelector('.social__caption').textContent = data[pictureID].decription;
 
     preview.classList.remove('hidden');
 
-    if (data[number].comments.length > 0) {
-      commentsCountElement.textContent = data[number].comments.length;
-      comments = data[number].comments;
+    if (data[pictureID].comments.length > 0) {
+      commentsCountElement.textContent = data[pictureID].comments.length;
+      comments = data[pictureID].comments;
       renderComments();
     }
   };
