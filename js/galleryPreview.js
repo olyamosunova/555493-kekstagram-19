@@ -2,11 +2,13 @@
 
 (function () {
   var PORTION_COMMENTS_COUNT = 5;
-  var preview = document.querySelector('.big-picture');
-  var commentsElement = preview.querySelector('.social__comments');
-  var commentsLoaderButton = preview.querySelector('.comments-loader');
-  var commentsShowedCountElement = preview.querySelector('.comments-showed');
-  var commentsCountElement = preview.querySelector('.comments-count');
+  var bodyElement = document.querySelector('body');
+  var previewElement = document.querySelector('.big-picture');
+  var previewCloseButton = previewElement.querySelector('.big-picture__cancel');
+  var commentsElement = previewElement.querySelector('.social__comments');
+  var commentsLoaderButton = previewElement.querySelector('.comments-loader');
+  var commentsShowedCountElement = previewElement.querySelector('.comments-showed');
+  var commentsCountElement = previewElement.querySelector('.comments-count');
   var showedCommentsCount = 0;
   var comments;
 
@@ -54,11 +56,11 @@
 
   var renderPreview = function (data, pictureID) {
     commentsElement.innerHTML = '';
-    preview.querySelector('.big-picture__img img').src = data[pictureID].url;
-    preview.querySelector('.likes-count').textContent = data[pictureID].likes;
-    preview.querySelector('.social__caption').textContent = data[pictureID].decription;
+    previewElement.querySelector('.big-picture__img img').src = data[pictureID].url;
+    previewElement.querySelector('.likes-count').textContent = data[pictureID].likes;
+    previewElement.querySelector('.social__caption').textContent = data[pictureID].decription;
 
-    preview.classList.remove('hidden');
+    previewElement.classList.remove('hidden');
 
     if (data[pictureID].comments.length > 0) {
       commentsCountElement.textContent = data[pictureID].comments.length;
@@ -74,10 +76,11 @@
       pictureNumber = evt.target.parentNode.dataset.pictureID;
     }
     renderPreview(window.data.getData(), pictureNumber);
-    document.querySelector('body').classList.add('modal-open');
+    bodyElement.classList.add('modal-open');
 
     document.removeEventListener('keydown', window.picture.picturePressEnterHandler);
     document.addEventListener('keydown', previewPressEscape);
+    previewCloseButton.addEventListener('click', closePreview);
   };
 
   var closePreview = function () {
@@ -85,8 +88,8 @@
     document.removeEventListener('keydown', previewPressEscape);
     commentsLoaderButton.removeEventListener('click', renderComments);
     document.addEventListener('keydown', window.picture.picturePressEnterHandler);
-    document.querySelector('body').classList.remove('modal-open');
-    preview.classList.add('hidden');
+    bodyElement.classList.remove('modal-open');
+    previewElement.classList.add('hidden');
   };
 
   var previewPressEscape = function (evt) {
@@ -94,10 +97,6 @@
       closePreview();
     }
   };
-
-  var previewCloseButton = preview.querySelector('.big-picture__cancel');
-
-  previewCloseButton.addEventListener('click', closePreview);
 
   window.galleryPreview = {
     open: openPreview,

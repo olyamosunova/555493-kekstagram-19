@@ -2,12 +2,12 @@
 
 (function () {
   var RANDOM_FILTERED_COUNT = 10;
-  var galleryFilter = document.querySelector('.img-filters');
+  var galleryFilterElement = document.querySelector('.img-filters');
   var currentFilter = 'default';
 
   var showFilters = function () {
-    galleryFilter.classList.remove('img-filters--inactive');
-    galleryFilter.addEventListener('click', window.debounce(applyFilterHandler));
+    galleryFilterElement.classList.remove('img-filters--inactive');
+    galleryFilterElement.addEventListener('click', window.debounce(applyFilterHandler));
   };
 
   var shuffleArray = function (arr) {
@@ -50,7 +50,7 @@
 
   var applyFilterHandler = function (evt) {
     if (evt.target.classList.contains('img-filters__button')) {
-      var currentFilterButton = document.querySelector('#filter-' + currentFilter);
+      var currentFilterButton = galleryFilterElement.querySelector('#filter-' + currentFilter);
       currentFilterButton.classList.remove('img-filters__button--active');
       currentFilterButton.disabled = false;
 

@@ -2,7 +2,7 @@
 
 (function () {
 
-  var renderPictures = function (data) {
+  var createPictures = function (data) {
     var picturesFragment = document.createDocumentFragment();
     var pictureTemplate = document.querySelector('#picture');
 
@@ -14,7 +14,11 @@
       picturesFragment.appendChild(pictureElement);
     });
 
-    document.querySelector('.pictures').appendChild(picturesFragment);
+    return picturesFragment;
+  };
+
+  var renderPictures = function (data) {
+    document.querySelector('.pictures').appendChild(createPictures(data));
 
     var pictures = document.querySelectorAll('.picture');
 
