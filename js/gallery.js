@@ -2,7 +2,7 @@
 
 (function () {
 
-  var createPictures = function (data) {
+  var createPicturesElements = function (data) {
     var picturesFragment = document.createDocumentFragment();
     var pictureTemplate = document.querySelector('#picture');
 
@@ -17,8 +17,8 @@
     return picturesFragment;
   };
 
-  var renderPictures = function (data) {
-    document.querySelector('.pictures').appendChild(createPictures(data));
+  var renderPicturesElements = function (data) {
+    document.querySelector('.pictures').appendChild(createPicturesElements(data));
 
     var pictures = document.querySelectorAll('.picture');
 
@@ -28,7 +28,7 @@
     });
   };
 
-  var deletePictures = function () {
+  var deletePicturesElements = function () {
     var pictures = document.querySelectorAll('a.picture');
     pictures.forEach(function (picture) {
       picture.remove();
@@ -44,13 +44,13 @@
   document.addEventListener('keydown', galleryPicturePressEnterHandler);
 
   var applyFilter = function (data) {
-    deletePictures();
-    renderPictures(data);
+    deletePicturesElements();
+    renderPicturesElements(data);
   };
 
   var dataLoadHandler = function (data) {
     window.data.save(data);
-    renderPictures(window.data.getData());
+    renderPicturesElements(window.data.getData());
     window.galleryFilter.show();
   };
 
