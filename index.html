@@ -34,7 +34,7 @@
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
-              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required >
+              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename"  accept="image/png, image/jpeg" required >
               <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
             </fieldset>
 
@@ -234,16 +234,14 @@
   </template>
   <script src="js/debounce.js"></script>
   <script src="js/backend.js"></script>
-  <script src="js/constants.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/utils.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/gallery-filter.js"></script>
   <script src="js/gallery.js"></script>
-  <script src="js/preview.js"></script>
-  <script src="js/picture.js"></script>
+  <script src="js/galleryFilter.js"></script>
+  <script src="js/galleryPreview.js"></script>
   <script src="js/slider.js"></script>
   <script src="js/form.js"></script>
-  <script src="js/validateForm.js"></script>
+  <script src="js/formValidator.js"></script>
   <script src="js/message.js"></script>
 </body>
 </html>

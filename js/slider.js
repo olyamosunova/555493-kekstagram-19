@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var DEFAULT_DEPTH_VALUE = 100;
+
   var pinElement = document.querySelector('.effect-level__pin');
   var lineElement = document.querySelector('.effect-level__line');
   var depthElement = document.querySelector('.effect-level__depth');
@@ -50,11 +52,11 @@
   var showEffectSliderHandler = function () {
     pinElement.style.left = lineElement.clientWidth + 'px';
     depthElement.style.width = lineElement.clientWidth + 'px';
-    depthValueInput.value = window.constants.DEFAULT_DEPTH_VALUE;
+    depthValueInput.value = DEFAULT_DEPTH_VALUE;
   };
 
   window.slider = {
-    showHandler: showEffectSliderHandler,
+    show: showEffectSliderHandler,
     getDepthValue: getDepthValue
   };
 

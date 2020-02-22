@@ -2,49 +2,62 @@
 
 (function () {
 
-  var renderPictures = function (data) {
+  var createPicturesElements = function (data) {
     var picturesFragment = document.createDocumentFragment();
-    var templatePicture = document.querySelector('#picture');
+    var pictureTemplate = document.querySelector('#picture');
 
     data.forEach(function (item) {
-      var pictureElement = templatePicture.cloneNode(true).content;
+      var pictureElement = pictureTemplate.cloneNode(true).content;
       pictureElement.querySelector('.picture__img').src = item.url;
       pictureElement.querySelector('.picture__likes').textContent = item.likes;
       pictureElement.querySelector('.picture__comments').textContent = item.comments.length;
       picturesFragment.appendChild(pictureElement);
     });
 
-    document.querySelector('.pictures').appendChild(picturesFragment);
+    return picturesFragment;
+  };
+
+  var renderPicturesElements = function (data) {
+    document.querySelector('.pictures').appendChild(createPicturesElements(data));
 
     var pictures = document.querySelectorAll('.picture');
 
     pictures.forEach(function (picture, index) {
       picture.dataset.pictureID = index;
-      picture.addEventListener('click', window.preview.open);
+      picture.addEventListener('click', window.galleryPreview.open);
     });
   };
 
-  var deletePictures = function () {
+  var deletePicturesElements = function () {
     var pictures = document.querySelectorAll('a.picture');
     pictures.forEach(function (picture) {
       picture.remove();
     });
   };
 
+  var galleryPicturePressEnterHandler = function (evt) {
+    if (!window.utils.isModalOpen() && window.utils.isEnterPressed && evt.target.classList.contains('picture')) {
+      window.galleryPreview.open(evt);
+    }
+  };
+
+  document.addEventListener('keydown', galleryPicturePressEnterHandler);
+
   var applyFilter = function (data) {
-    deletePictures();
-    renderPictures(data);
+    deletePicturesElements();
+    renderPicturesElements(data);
   };
 
   var dataLoadHandler = function (data) {
     window.data.save(data);
-    renderPictures(window.data.getData());
+    renderPicturesElements(window.data.getData());
     window.galleryFilter.show();
   };
 
   window.backend.load(null, dataLoadHandler);
 
   window.gallery = {
-    applyFilter: applyFilter
+    applyFilter: applyFilter,
+    galleryPicturePressEnterHandler: galleryPicturePressEnterHandler
   };
 })();

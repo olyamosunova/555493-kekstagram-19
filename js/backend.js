@@ -10,6 +10,7 @@
     var xhr = new XMLHttpRequest();
 
     xhr.responseType = 'json';
+    xhr.timeout = RESPONCE_TIMEOUT;
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_STATUS) {
@@ -26,8 +27,6 @@
     xhr.addEventListener('timeout', function () {
       errorHandler('Timeout ' + xhr.timeout + 'mc');
     });
-
-    xhr.timeout = RESPONCE_TIMEOUT;
 
     return xhr;
   };

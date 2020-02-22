@@ -1,24 +1,9 @@
 'use strict';
 
 (function () {
+  var MAX_HASHTAGS_COUNT = 5;
+  var MAX_HASHTAG_LENGTH = 20;
   var uploadFileHashtagsInput = document.querySelector('.text__hashtags');
-
-  var findDuplicateElements = function (elements) {
-    var duplicatesExist = false;
-    var etalon = '';
-    if (elements.length > 1) {
-      for (var i = 0; i < elements.length; i++) {
-        etalon = elements[i];
-        for (var j = i + 1; j < elements.length; j++) {
-          if (etalon.toLocaleLowerCase() === elements[j].toLocaleLowerCase()) {
-            duplicatesExist = true;
-          }
-        }
-      }
-    }
-
-    return duplicatesExist;
-  };
 
   var validateHashtags = function () {
     var validity = true;
@@ -27,14 +12,14 @@
       var hashtags = uploadFileHashtagsInput.value.split(' ');
       var errorMessage = '';
 
-      if (hashtags.length > window.constants.MAX_HASHTAGS_COUNT) {
+      if (hashtags.length > MAX_HASHTAGS_COUNT) {
         errorMessage += 'Нельзя указать больше пяти хэш-тегов. ';
         validity = false;
-      } else if (findDuplicateElements(hashtags)) {
+      } else if (window.utils.isArrayHasDuplicateElements(hashtags)) {
         errorMessage += 'Один и тот же хэш-тег не может быть использован дважды. ';
       } else {
         hashtags.forEach(function (hashtag) {
-          if (hashtag.length > window.constants.MAX_HASHTAG_LENGTH) {
+          if (hashtag.length > MAX_HASHTAG_LENGTH) {
             errorMessage += 'Максимальная длина одного хэш-тега 20 символов, включая решётку. ';
             validity = false;
           } else if (hashtag === '#') {
@@ -57,7 +42,7 @@
 
   uploadFileHashtagsInput.addEventListener('input', validateHashtags);
 
-  window.validateForm = {
+  window.formValidator = {
     validate: validateHashtags
   };
 })();
