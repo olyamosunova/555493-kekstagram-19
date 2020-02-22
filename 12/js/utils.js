@@ -3,22 +3,6 @@
   var ESC_KEYCODE = 'Escape';
   var ENTER_KEYCODE = 'Enter';
 
-  var getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
-  var getRandomElementFromArray = function (array) {
-    var min = Math.floor(Math.random() * 2);
-    var max = array.length;
-    var randomNumber = Math.floor(Math.random() * (max - min / 2));
-
-    randomNumber = randomNumber < 0 ? 0 : randomNumber;
-
-    array = Math.floor(Math.random() * 2) === 0 ? array.reverse() : array;
-
-    return array[randomNumber];
-  };
-
   var isEnterPressed = function (evt) {
     return evt.keyCode === ENTER_KEYCODE;
   };
@@ -35,13 +19,32 @@
     return document.querySelector('body').classList.contains('modal-open');
   };
 
+  var isArrayHasDuplicateElements = function (elements) {
+    var duplicatesExist = false;
+
+    if (elements.length < 2) {
+      return duplicatesExist;
+    }
+
+    var etalon = '';
+    for (var i = 0; i < elements.length; i++) {
+      etalon = elements[i];
+      for (var j = i + 1; j < elements.length; j++) {
+        if (etalon.toLocaleLowerCase() === elements[j].toLocaleLowerCase()) {
+          duplicatesExist = true;
+        }
+      }
+    }
+
+    return duplicatesExist;
+  };
+
   window.utils = {
-    getRandomNumber: getRandomNumber,
-    getRandomElementFromArray: getRandomElementFromArray,
     isEnterPressed: isEnterPressed,
     isEscPressed: isEscPressed,
     isOnFocus: isOnFocus,
-    isModalOpen: isModalOpen
+    isModalOpen: isModalOpen,
+    isArrayHasDuplicateElements: isArrayHasDuplicateElements
   };
 
 })();
