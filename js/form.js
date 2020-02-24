@@ -6,7 +6,6 @@
 
   var bodyElement = document.querySelector('body');
   var uploadFileFormElement = document.querySelector('.img-upload__form');
-  var uploadFileFormSubmitButton = uploadFileFormElement.querySelector('.img-upload__submit');
   var uploadFileInput = uploadFileFormElement.querySelector('#upload-file');
   var uploadFileWindowElement = uploadFileFormElement.querySelector('.img-upload__overlay');
   var uploadFileCancelButton = uploadFileFormElement.querySelector('.img-upload__cancel');
@@ -24,13 +23,19 @@
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', uploadFileWindowPressEscapeHandler);
     effectLevelElement.classList.add('hidden');
+
+    uploadFileFormElement.addEventListener('submit', uploadFileFormSubmitHandler);
+    window.formValidator.startWatching();
   };
 
   var closeUploadWindow = function () {
+    uploadFileFormClear();
+    uploadFileFormElement.removeEventListener('submit', uploadFileFormSubmitHandler);
+    window.formValidator.stopWatching();
+
     uploadFileWindowElement.classList.add('hidden');
     bodyElement.classList.remove('modal-open');
     document.removeEventListener('keydown', uploadFileWindowPressEscapeHandler);
-    uploadFileFormClear();
   };
 
   var uploadFileFormClear = function () {
@@ -156,17 +161,12 @@
 
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    if (window.formValidator.validate(uploadFileHashtagsInput)) {
+    if (window.formValidator.isValidate()) {
       window.backend.save(new FormData(uploadFileFormElement), uploadErrorHandler, uploadSuccessHandler);
+    } else {
+      uploadFileHashtagsInput.classList.add('input-invalid');
     }
   };
-
-  var uploadFileHashtagsInputHandler = function () {
-    uploadFileHashtagsInput.classList.remove('input-invalid');
-  };
-
-  uploadFileFormSubmitButton.addEventListener('click', uploadFileFormSubmitHandler);
-  uploadFileHashtagsInput.addEventListener('input', uploadFileHashtagsInputHandler);
 
   window.form = {
     setEffectLevelDepth: setEffectLevelDepth
