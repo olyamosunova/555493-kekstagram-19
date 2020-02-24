@@ -3,14 +3,15 @@
 (function () {
   var MAX_HASHTAGS_COUNT = 5;
   var MAX_HASHTAG_LENGTH = 20;
-  var uploadFileHashtagsInput = document.querySelector('.text__hashtags');
+  var errorMessage = '';
 
-  var validateHashtags = function () {
+  var validateHashtags = function (inputElement) {
+    var inputValue = inputElement.value;
     var validity = true;
 
-    if (uploadFileHashtagsInput.value !== '') {
-      var hashtags = uploadFileHashtagsInput.value.split(' ');
-      var errorMessage = '';
+    if (inputValue !== '') {
+      var hashtags = inputValue.split(' ');
+      errorMessage = '';
 
       if (hashtags.length > MAX_HASHTAGS_COUNT) {
         errorMessage += 'Нельзя указать больше пяти хэш-тегов. ';
@@ -33,14 +34,15 @@
           }
         });
       }
+    }
 
-      uploadFileHashtagsInput.setCustomValidity(errorMessage);
+    if (!validity) {
+      inputElement.classList.add('input-invalid');
+      inputElement.setCustomValidity(errorMessage);
     }
 
     return validity;
   };
-
-  uploadFileHashtagsInput.addEventListener('input', validateHashtags);
 
   window.formValidator = {
     validate: validateHashtags

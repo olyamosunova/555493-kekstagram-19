@@ -4,11 +4,11 @@
   var ENTER_KEYCODE = 'Enter';
 
   var isEnterPressed = function (evt) {
-    return evt.keyCode === ENTER_KEYCODE;
+    return evt.key === ENTER_KEYCODE;
   };
 
   var isEscPressed = function (evt) {
-    return evt.keyCode === ESC_KEYCODE;
+    return evt.key === ESC_KEYCODE;
   };
 
   var isOnFocus = function (element) {

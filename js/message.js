@@ -28,6 +28,7 @@
 
     document.querySelector('main').appendChild(message);
     MessageElement = document.querySelector('section.error');
+
     MessageElement.querySelector('.error__button').addEventListener('click', hide);
     document.addEventListener('keydown', messageEscDownHandler);
   };

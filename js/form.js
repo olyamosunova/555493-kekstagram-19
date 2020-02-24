@@ -6,6 +6,7 @@
 
   var bodyElement = document.querySelector('body');
   var uploadFileFormElement = document.querySelector('.img-upload__form');
+  var uploadFileFormSubmitButton = uploadFileFormElement.querySelector('.img-upload__submit');
   var uploadFileInput = uploadFileFormElement.querySelector('#upload-file');
   var uploadFileWindowElement = uploadFileFormElement.querySelector('.img-upload__overlay');
   var uploadFileCancelButton = uploadFileFormElement.querySelector('.img-upload__cancel');
@@ -41,6 +42,7 @@
     uploadImagePreviewElement.classList = '';
     uploadFileDescriptionInput.value = '';
     effectsRadioSetElement.querySelector('#effect-none').checked = true;
+    uploadFileHashtagsInput.classList.remove('input-invalid');
   };
 
   var uploadFileWindowPressEscapeHandler = function (evt) {
@@ -154,12 +156,17 @@
 
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    if (window.formValidator.validate()) {
+    if (window.formValidator.validate(uploadFileHashtagsInput)) {
       window.backend.save(new FormData(uploadFileFormElement), uploadErrorHandler, uploadSuccessHandler);
     }
   };
 
-  uploadFileFormElement.addEventListener('submit', uploadFileFormSubmitHandler);
+  var uploadFileHashtagsInputHandler = function () {
+    uploadFileHashtagsInput.classList.remove('input-invalid');
+  };
+
+  uploadFileFormSubmitButton.addEventListener('click', uploadFileFormSubmitHandler);
+  uploadFileHashtagsInput.addEventListener('input', uploadFileHashtagsInputHandler);
 
   window.form = {
     setEffectLevelDepth: setEffectLevelDepth
