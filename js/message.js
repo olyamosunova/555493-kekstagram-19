@@ -55,7 +55,7 @@
     messageElement.remove();
 
     document.removeEventListener('keydown', messageEscDownHandler);
-  }
+  };
 
   var hide = function (evt) {
     if (evt.target === messageElement) {
