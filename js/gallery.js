@@ -48,14 +48,18 @@
     renderPicturesElements(data);
   };
 
+  var errorLoadHandler = function () {
+    window.message.showError('The server can not find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurrence on the web', 'It\'s a crap');
+  };
+
   var dataLoadHandler = function (data) {
     window.data.save(data);
     renderPicturesElements(window.data.getData());
     window.galleryFilter.show();
   };
 
-  window.backend.load(null, dataLoadHandler);
-
+  window.backend.load(errorLoadHandler, dataLoadHandler);
+  window.message.showError('The server can not find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurrence on the web', 'It\'s a crap');
   window.gallery = {
     applyFilter: applyFilter,
     galleryPicturePressEnterHandler: galleryPicturePressEnterHandler
