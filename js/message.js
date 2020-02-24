@@ -18,7 +18,7 @@
 
     document.querySelector('main').appendChild(message);
     messageElement = document.querySelector('section.success');
-    messageElement.addEventListener('click', hide);
+    messageElement.addEventListener('click', messageElementClickHandler);
 
     messageElement.querySelector('.success__button').addEventListener('click', hidePressButtonHandler);
     document.addEventListener('keydown', messageEscDownHandler);
@@ -37,7 +37,7 @@
 
     document.querySelector('main').appendChild(message);
     messageElement = document.querySelector('section.error');
-    messageElement.addEventListener('click', hide);
+    messageElement.addEventListener('click', messageElementClickHandler);
 
     messageElement.querySelector('.error__button').addEventListener('click', hidePressButtonHandler);
     document.addEventListener('keydown', messageEscDownHandler);
@@ -45,24 +45,23 @@
 
   var messageEscDownHandler = function (evt) {
     if (window.utils.isEscPressed(evt)) {
-      messageElement.remove();
-
-      document.removeEventListener('keydown', messageEscDownHandler);
+      hide();
     }
   };
 
   var hidePressButtonHandler = function () {
-    messageElement.remove();
-
-    document.removeEventListener('keydown', messageEscDownHandler);
+    hide();
   };
 
-  var hide = function (evt) {
+  var messageElementClickHandler = function (evt) {
     if (evt.target === messageElement) {
-      messageElement.remove();
-
-      document.removeEventListener('keydown', messageEscDownHandler);
+      hide();
     }
+  };
+
+  var hide = function () {
+    messageElement.remove();
+    document.removeEventListener('keydown', messageEscDownHandler);
   };
 
   window.message = {

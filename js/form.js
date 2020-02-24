@@ -163,8 +163,6 @@
     evt.preventDefault();
     if (window.formValidator.isValidate()) {
       window.backend.save(new FormData(uploadFileFormElement), uploadErrorHandler, uploadSuccessHandler);
-    } else {
-      uploadFileHashtagsInput.classList.add('input-invalid');
     }
   };
 

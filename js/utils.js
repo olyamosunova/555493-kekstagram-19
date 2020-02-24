@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var ESC_KEYCODE = 'Escape';
   var ENTER_KEYCODE = 'Enter';
