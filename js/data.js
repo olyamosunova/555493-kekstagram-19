@@ -11,8 +11,15 @@
     return serverData;
   };
 
+  var getElementByURL = function (elementURL) {
+    return getData().filter(function (element) {
+      return element.url === elementURL;
+    }).pop();
+  };
+
   window.data = {
     save: saveData,
-    getData: getData
+    getData: getData,
+    getElementByURL: getElementByURL
   };
 })();

@@ -22,8 +22,7 @@
 
     var pictures = document.querySelectorAll('.picture');
 
-    pictures.forEach(function (picture, index) {
-      picture.dataset.pictureID = index;
+    pictures.forEach(function (picture) {
       picture.addEventListener('click', window.galleryPreview.open);
     });
   };
