@@ -1443,3 +1443,7 @@ main {
     grid-row: 1 / span 3;
   }
 }
+
+.input-invalid {
+  outline: 5px solid red;
+}

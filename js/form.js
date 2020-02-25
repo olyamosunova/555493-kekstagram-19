@@ -23,13 +23,19 @@
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', uploadFileWindowPressEscapeHandler);
     effectLevelElement.classList.add('hidden');
+
+    uploadFileFormElement.addEventListener('submit', uploadFileFormSubmitHandler);
+    window.formValidator.startWatching();
   };
 
   var closeUploadWindow = function () {
+    uploadFileFormClear();
+    uploadFileFormElement.removeEventListener('submit', uploadFileFormSubmitHandler);
+    window.formValidator.stopWatching();
+
     uploadFileWindowElement.classList.add('hidden');
     bodyElement.classList.remove('modal-open');
     document.removeEventListener('keydown', uploadFileWindowPressEscapeHandler);
-    uploadFileFormClear();
   };
 
   var uploadFileFormClear = function () {
@@ -41,6 +47,7 @@
     uploadImagePreviewElement.classList = '';
     uploadFileDescriptionInput.value = '';
     effectsRadioSetElement.querySelector('#effect-none').checked = true;
+    uploadFileHashtagsInput.classList.remove('input-invalid');
   };
 
   var uploadFileWindowPressEscapeHandler = function (evt) {
@@ -154,12 +161,10 @@
 
   var uploadFileFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    if (window.formValidator.validate()) {
+    if (window.formValidator.isValidate()) {
       window.backend.save(new FormData(uploadFileFormElement), uploadErrorHandler, uploadSuccessHandler);
     }
   };
-
-  uploadFileFormElement.addEventListener('submit', uploadFileFormSubmitHandler);
 
   window.form = {
     setEffectLevelDepth: setEffectLevelDepth

@@ -3,32 +3,43 @@
 (function () {
   var successTemplate = document.querySelector('#success').content;
   var errorTemplate = document.querySelector('#error').content;
-  var MessageElement;
+  var messageElement;
 
-  var showSuccess = function (text) {
+  var showSuccess = function (textTitle, textButton) {
     var message = successTemplate.cloneNode(true);
 
-    if (text) {
-      message.querySelector('.success__title').textContent = text;
+    if (textTitle) {
+      message.querySelector('.success__title').textContent = textTitle;
+    }
+
+    if (textButton) {
+      message.querySelector('.success__button').textContent = textButton;
     }
 
     document.querySelector('main').appendChild(message);
-    MessageElement = document.querySelector('section.success');
+    messageElement = document.querySelector('section.success');
+    messageElement.addEventListener('click', messageElementClickHandler);
 
-    MessageElement.querySelector('.success__button').addEventListener('click', hide);
+    messageElement.querySelector('.success__button').addEventListener('click', hidePressButtonHandler);
     document.addEventListener('keydown', messageEscDownHandler);
   };
 
-  var showError = function (text) {
+  var showError = function (textTitle, textButton) {
     var message = errorTemplate.cloneNode(true);
 
-    if (text) {
-      message.querySelector('.error__title').textContent = text;
+    if (textTitle) {
+      message.querySelector('.error__title').textContent = textTitle;
+    }
+
+    if (textButton) {
+      message.querySelector('.error__button').textContent = textButton;
     }
 
     document.querySelector('main').appendChild(message);
-    MessageElement = document.querySelector('section.error');
-    MessageElement.querySelector('.error__button').addEventListener('click', hide);
+    messageElement = document.querySelector('section.error');
+    messageElement.addEventListener('click', messageElementClickHandler);
+
+    messageElement.querySelector('.error__button').addEventListener('click', hidePressButtonHandler);
     document.addEventListener('keydown', messageEscDownHandler);
   };
 
@@ -38,9 +49,18 @@
     }
   };
 
-  var hide = function () {
-    MessageElement.remove();
+  var hidePressButtonHandler = function () {
+    hide();
+  };
 
+  var messageElementClickHandler = function (evt) {
+    if (evt.target === messageElement) {
+      hide();
+    }
+  };
+
+  var hide = function () {
+    messageElement.remove();
     document.removeEventListener('keydown', messageEscDownHandler);
   };
 
