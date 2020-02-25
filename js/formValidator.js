@@ -5,7 +5,7 @@
   var MAX_HASHTAG_LENGTH = 20;
   var hashtagInput = document.querySelector('.text__hashtags');
   var submitButton = document.querySelector('.img-upload__submit');
-  var validity;
+  var validity = true;
 
   var validateHashtags = function () {
     validity = true;
@@ -36,7 +36,7 @@
             validity = false;
             hashtagInput.setCustomValidity('Хэш-тег должен начинаться с символа # (решётка).');
             return validity;
-          } else if (/^#([a-zA-Zа-яА-Я]+-)*([a-zA-Zа-яА-Я])/.test(hashtags[i].slice(1, (hashtags[i].length - 1)))) {
+          } else if (!/^[а-яА-ЯёЁa-zA-Z0-9]+$/.test(hashtags[i].slice(1, (hashtags[i].length)))) {
             validity = false;
             hashtagInput.setCustomValidity('Cтрока после решётки должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т.п.), символы пунктуации (тире, дефис, запятая и т.п.), эмодзи и т.д.');
             return validity;
@@ -45,6 +45,7 @@
       }
     }
     hashtagInput.setCustomValidity('');
+    hashtagInput.classList.remove('input-invalid');
 
     return validity;
   };

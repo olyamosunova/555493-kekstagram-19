@@ -27,11 +27,11 @@
       return duplicatesExist;
     }
 
-    var etalon = '';
+    var template = '';
     for (var i = 0; i < elements.length; i++) {
-      etalon = elements[i];
+      template = elements[i];
       for (var j = i + 1; j < elements.length; j++) {
-        if (etalon.toLocaleLowerCase() === elements[j].toLocaleLowerCase()) {
+        if (template.toLocaleLowerCase() === elements[j].toLocaleLowerCase()) {
           duplicatesExist = true;
         }
       }

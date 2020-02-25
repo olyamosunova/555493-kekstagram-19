@@ -4,6 +4,7 @@
   var PORTION_COMMENTS_COUNT = 5;
   var bodyElement = document.querySelector('body');
   var previewElement = document.querySelector('.big-picture');
+  var previewImageElement = previewElement.querySelector('.big-picture__img img');
   var previewCloseButton = previewElement.querySelector('.big-picture__cancel');
   var commentsElement = previewElement.querySelector('.social__comments');
   var commentsLoaderButton = previewElement.querySelector('.comments-loader');
@@ -54,28 +55,27 @@
     return newComment;
   };
 
-  var renderPreview = function (data, pictureID) {
+  var renderPreview = function (pictureObject) {
     commentsElement.innerHTML = '';
-    previewElement.querySelector('.big-picture__img img').src = data[pictureID].url;
-    previewElement.querySelector('.likes-count').textContent = data[pictureID].likes;
-    previewElement.querySelector('.social__caption').textContent = data[pictureID].decription;
+
+    previewImageElement.src = pictureObject.url;
+    previewImageElement.alt = pictureObject.description;
+    previewElement.querySelector('.likes-count').textContent = pictureObject.likes;
+    previewElement.querySelector('.social__caption').textContent = pictureObject.description;
 
     previewElement.classList.remove('hidden');
 
-    if (data[pictureID].comments.length > 0) {
-      commentsCountElement.textContent = data[pictureID].comments.length;
-      comments = data[pictureID].comments;
+    if (pictureObject.comments.length > 0) {
+      commentsCountElement.textContent = pictureObject.comments.length;
+      comments = pictureObject.comments;
       renderComments();
     }
   };
 
   var openPreview = function (evt) {
     evt.preventDefault();
-    var pictureNumber = evt.target.dataset.pictureID;
-    if (pictureNumber === undefined) {
-      pictureNumber = evt.target.parentNode.dataset.pictureID;
-    }
-    renderPreview(window.data.getData(), pictureNumber);
+    var pictureURL = evt.currentTarget.querySelector('img').getAttribute('src');
+    renderPreview(window.data.getElementByURL(pictureURL));
     bodyElement.classList.add('modal-open');
 
     document.removeEventListener('keydown', window.picture.picturePressEnterHandler);
